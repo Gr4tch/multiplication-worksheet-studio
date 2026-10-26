@@ -1,0 +1,62 @@
+/* Print Stylesheet for Printable Math Worksheets */
+
+@page {
+  size: letter portrait;
+  margin: 0.4in;
+}
+
+@media print {
+  /* Hide all Streamlit chrome, sidebar, header, and buttons */
+  header, footer, [data-testid="stSidebar"], [data-testid="stToolbar"], .no-print, button {
+    display: none !important;
+  }
+  
+  body, .main, [data-testid="stAppViewContainer"] {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .worksheet-canvas {
+    border: none !important;
+    box-shadow: none !important;
+    width: 100% !important;
+    margin: 0 auto !important;
+    page-break-after: always;
+  }
+
+  .page-break {
+    page-break-before: always;
+  }
+}
+
+.worksheet-canvas {
+  background-color: #ffffff;
+  color: #000000;
+  border: 1.5px solid #000000;
+  border-radius: 4px;
+  padding: 24px;
+  max-width: 820px;
+  margin: 0 auto 24px auto;
+  font-family: inherit;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+.cut-line {
+  border-top: 2px dashed #000000;
+  text-align: center;
+  position: relative;
+  margin: 20px 0;
+}
+
+.cut-line span {
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #ffffff;
+  padding: 0 12px;
+  font-weight: bold;
+  font-size: 11px;
+}

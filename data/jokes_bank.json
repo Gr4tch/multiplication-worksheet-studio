@@ -1,0 +1,270 @@
+{
+  "jokes": [
+    {
+      "id": "joke_anim_01",
+      "category": "Animals",
+      "question": "What do you call a sleeping dinosaur?",
+      "punchline": "A DINO SNORE",
+      "length_category": "short"
+    },
+    {
+      "id": "joke_anim_02",
+      "category": "Animals",
+      "question": "What do you call a bear with no teeth?",
+      "punchline": "A GUMMY BEAR",
+      "length_category": "short"
+    },
+    {
+      "id": "joke_anim_03",
+      "category": "Animals",
+      "question": "Why do fish live in salt water?",
+      "punchline": "BECAUSE PEPPER MAKES THEM SNEEZE",
+      "length_category": "medium"
+    },
+    {
+      "id": "joke_anim_04",
+      "category": "Animals",
+      "question": "What do you call a dog that can do magic?",
+      "punchline": "A LABRACADABRADOR",
+      "length_category": "short"
+    },
+    {
+      "id": "joke_anim_05",
+      "category": "Animals",
+      "question": "Where do polar bears keep their money?",
+      "punchline": "IN A SNOW BANK",
+      "length_category": "short"
+    },
+    {
+      "id": "joke_anim_06",
+      "category": "Animals",
+      "question": "What is a frog's favorite drink?",
+      "punchline": "CROAK A COLA",
+      "length_category": "short"
+    },
+    {
+      "id": "joke_anim_07",
+      "category": "Animals",
+      "question": "Why did the cow cross the road?",
+      "punchline": "TO GET TO THE MOO VIES",
+      "length_category": "short"
+    },
+    {
+      "id": "joke_anim_08",
+      "category": "Animals",
+      "question": "What do you call an alligator in a vest?",
+      "punchline": "AN INVESTIGATOR",
+      "length_category": "short"
+    },
+    {
+      "id": "joke_anim_09",
+      "category": "Animals",
+      "question": "Why can't leopards hide well in the jungle?",
+      "punchline": "THEY ARE ALWAYS SPOTTED",
+      "length_category": "medium"
+    },
+    {
+      "id": "joke_anim_10",
+      "category": "Animals",
+      "question": "What kind of bird can write underwater?",
+      "punchline": "A BALLPOINT PENGUIN",
+      "length_category": "medium"
+    },
+    {
+      "id": "joke_school_01",
+      "category": "School",
+      "question": "Why was the math book always looking so sad?",
+      "punchline": "BECAUSE IT HAD TOO MANY PROBLEMS",
+      "length_category": "medium"
+    },
+    {
+      "id": "joke_school_02",
+      "category": "School",
+      "question": "Why did the music teacher need a ladder?",
+      "punchline": "TO REACH THE HIGH NOTES",
+      "length_category": "medium"
+    },
+    {
+      "id": "joke_school_03",
+      "category": "School",
+      "question": "Why did the student eat his homework?",
+      "punchline": "BECAUSE THE TEACHER SAID IT WAS A PIECE OF CAKE",
+      "length_category": "long"
+    },
+    {
+      "id": "joke_school_04",
+      "category": "School",
+      "question": "What did one pencil say to the other pencil?",
+      "punchline": "LOOKING SHARP TODAY",
+      "length_category": "short"
+    },
+    {
+      "id": "joke_school_05",
+      "category": "School",
+      "question": "Why did the clock get sent to the principal's office?",
+      "punchline": "FOR TALKING TOO MUCH",
+      "length_category": "short"
+    },
+    {
+      "id": "joke_school_06",
+      "category": "School",
+      "question": "How do teachers make a secret gold drink?",
+      "punchline": "THEY USE 24 CARROT JUICE",
+      "length_category": "medium"
+    },
+    {
+      "id": "joke_school_07",
+      "category": "School",
+      "question": "What is a snake's favorite subject in school?",
+      "punchline": "HISSS STORY",
+      "length_category": "short"
+    },
+    {
+      "id": "joke_school_08",
+      "category": "School",
+      "question": "Why do pencils always win at races?",
+      "punchline": "THEY ALWAYS LEAD",
+      "length_category": "short"
+    },
+    {
+      "id": "joke_food_01",
+      "category": "Food",
+      "question": "Why did the banana go to the doctor?",
+      "punchline": "BECAUSE IT WAS NOT PEELING WELL",
+      "length_category": "medium"
+    },
+    {
+      "id": "joke_food_02",
+      "category": "Food",
+      "question": "What do you call fake noodle soup?",
+      "punchline": "AN IMPASTA",
+      "length_category": "short"
+    },
+    {
+      "id": "joke_food_03",
+      "category": "Food",
+      "question": "Why did the tomato turn bright red?",
+      "punchline": "BECAUSE IT SAW THE SALAD DRESSING",
+      "length_category": "medium"
+    },
+    {
+      "id": "joke_food_04",
+      "category": "Food",
+      "question": "What do you call cheese that is not yours?",
+      "punchline": "NACHO CHEESE",
+      "length_category": "short"
+    },
+    {
+      "id": "joke_food_05",
+      "category": "Food",
+      "question": "Why did the cookie go to the hospital?",
+      "punchline": "BECAUSE IT FELT CRUMMY",
+      "length_category": "short"
+    },
+    {
+      "id": "joke_food_06",
+      "category": "Food",
+      "question": "What kind of key opens a delicious banana?",
+      "punchline": "A MONKEY",
+      "length_category": "short"
+    },
+    {
+      "id": "joke_food_07",
+      "category": "Food",
+      "question": "Why did the jelly baby go to school?",
+      "punchline": "TO BE A SMART COOKIE",
+      "length_category": "short"
+    },
+    {
+      "id": "joke_science_01",
+      "category": "Science",
+      "question": "How do astronauts organize a party in space?",
+      "punchline": "THEY PLANET WELL",
+      "length_category": "short"
+    },
+    {
+      "id": "joke_science_02",
+      "category": "Science",
+      "question": "What kind of star wears sunglasses?",
+      "punchline": "A MOVIE STAR",
+      "length_category": "short"
+    },
+    {
+      "id": "joke_science_03",
+      "category": "Science",
+      "question": "Why did the sun go to school?",
+      "punchline": "TO GET A LITTLE BRIGHTER",
+      "length_category": "medium"
+    },
+    {
+      "id": "joke_science_04",
+      "category": "Science",
+      "question": "What is an astronaut's favorite key on the keyboard?",
+      "punchline": "THE SPACE BAR",
+      "length_category": "short"
+    },
+    {
+      "id": "joke_science_05",
+      "category": "Science",
+      "question": "How does the moon cut his hair?",
+      "punchline": "ECLIPSE IT",
+      "length_category": "short"
+    },
+    {
+      "id": "joke_science_06",
+      "category": "Science",
+      "question": "Why can't you trust atoms in a laboratory?",
+      "punchline": "THEY MAKE UP EVERYTHING",
+      "length_category": "medium"
+    },
+    {
+      "id": "joke_puns_01",
+      "category": "Silly Puns",
+      "question": "Why do bicycles fall over when parked?",
+      "punchline": "THEY ARE TWO TIRED",
+      "length_category": "short"
+    },
+    {
+      "id": "joke_puns_02",
+      "category": "Silly Puns",
+      "question": "What falls in winter but never ever gets hurt?",
+      "punchline": "THE SNOW",
+      "length_category": "short"
+    },
+    {
+      "id": "joke_puns_03",
+      "category": "Silly Puns",
+      "question": "What building has the most stories in town?",
+      "punchline": "THE PUBLIC LIBRARY",
+      "length_category": "medium"
+    },
+    {
+      "id": "joke_puns_04",
+      "category": "Silly Puns",
+      "question": "Why did the scarecrow win a big gold medal?",
+      "punchline": "HE WAS OUTSTANDING IN HIS FIELD",
+      "length_category": "medium"
+    },
+    {
+      "id": "joke_puns_05",
+      "category": "Silly Puns",
+      "question": "What has hands but cannot clap?",
+      "punchline": "A GRANDFATHER CLOCK",
+      "length_category": "medium"
+    },
+    {
+      "id": "joke_puns_06",
+      "category": "Silly Puns",
+      "question": "What gets wetter and wetter the more it dries?",
+      "punchline": "A BATH TOWEL",
+      "length_category": "short"
+    },
+    {
+      "id": "joke_puns_07",
+      "category": "Silly Puns",
+      "question": "Why did the golfer bring two pairs of pants?",
+      "punchline": "IN CASE HE GOT A HOLE IN ONE",
+      "length_category": "medium"
+    }
+  ]
+}

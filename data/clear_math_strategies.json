@@ -1,0 +1,90 @@
+{
+  "strategies": {
+    "0": {
+      "name": "Zero Property of Multiplication",
+      "cluster": "Foundations",
+      "student_tip": "Any number multiplied by 0 is always 0! Imagine 5 empty bags—you have 0 items.",
+      "visual_hint": "0 groups of anything = 0 total"
+    },
+    "1": {
+      "name": "Identity Property of Multiplication",
+      "cluster": "Foundations",
+      "student_tip": "Any number multiplied by 1 stays the exact same number! 1 group of 8 is just 8.",
+      "visual_hint": "1 × n = n (Identity Property)"
+    },
+    "2": {
+      "name": "Doubles Strategy",
+      "cluster": "Doubles",
+      "student_tip": "Multiplying by 2 is just doubling the other number! (e.g., 2 × 6 is 6 + 6 = 12).",
+      "visual_hint": "Double it! 2 × n = n + n"
+    },
+    "3": {
+      "name": "Double Plus One Group",
+      "cluster": "Derived",
+      "student_tip": "To multiply by 3, double the number first, then add one more group! (3 × 7 = 14 + 7 = 21).",
+      "visual_hint": "3 × n = (2 × n) + n"
+    },
+    "4": {
+      "name": "Double and Double Again",
+      "cluster": "Doubles",
+      "student_tip": "To multiply by 4, double the number, then double it again! (4 × 6: double 6 is 12, double 12 is 24!).",
+      "visual_hint": "4 × n = 2 × (2 × n)"
+    },
+    "5": {
+      "name": "Clock / Half-of-Ten Strategy",
+      "cluster": "Foundations",
+      "student_tip": "Multiplying by 5 always ends in 0 or 5. Think of the minute hand on a clock or half of 10!",
+      "visual_hint": "Skip-count by 5s or take half of (10 × n)"
+    },
+    "6": {
+      "name": "Five Plus One Group (or Double 3s)",
+      "cluster": "Derived",
+      "student_tip": "To multiply by 6, find the 5s fact first, then add one more group! (6 × 7 = (5 × 7) + 7 = 35 + 7 = 42).",
+      "visual_hint": "6 × n = (5 × n) + n"
+    },
+    "7": {
+      "name": "Decompose into 5s and 2s (Distributive Property)",
+      "cluster": "Derived",
+      "student_tip": "Break 7 into 5 and 2! (7 × 8 = (5 × 8) + (2 × 8) = 40 + 16 = 56).",
+      "visual_hint": "7 × n = (5 × n) + (2 × n)"
+    },
+    "8": {
+      "name": "Double-Double-Double",
+      "cluster": "Doubles",
+      "student_tip": "To multiply by 8, double three times! Or think: 8 × n = (5 × n) + (3 × n).",
+      "visual_hint": "8 × n = 2 × 2 × 2 × n"
+    },
+    "9": {
+      "name": "Ten Minus One Group (or Digits Sum to 9)",
+      "cluster": "Derived",
+      "student_tip": "To multiply by 9, multiply by 10 first and subtract 1 group! (9 × 6 = 60 - 6 = 54. Notice 5 + 4 = 9!).",
+      "visual_hint": "9 × n = (10 × n) - n"
+    },
+    "10": {
+      "name": "Place-Value Shift",
+      "cluster": "Foundations",
+      "student_tip": "Multiplying by 10 shifts the digits one place value to the left (ends in a zero).",
+      "visual_hint": "10 × n = n tens"
+    },
+    "11": {
+      "name": "Ten Plus One Group",
+      "cluster": "Upper",
+      "student_tip": "To multiply by 11, multiply by 10 first, then add one more group! (11 × 4 = 40 + 4 = 44).",
+      "visual_hint": "11 × n = (10 × n) + n"
+    },
+    "12": {
+      "name": "Ten Plus Two Groups (Decomposition)",
+      "cluster": "Upper",
+      "student_tip": "To multiply by 12, break 12 into 10 and 2! (12 × 5 = (10 × 5) + (2 × 5) = 50 + 10 = 60).",
+      "visual_hint": "12 × n = (10 × n) + (2 × n)"
+    }
+  },
+  "preset_clusters": {
+    "Foundations (0, 1, 2, 5, 10)": [0, 1, 2, 5, 10],
+    "Doubles & Powers (2, 4, 8)": [2, 4, 8],
+    "Derived & Distributive (3, 6, 7, 9)": [3, 6, 7, 9],
+    "Upper Extensions (11, 12)": [11, 12],
+    "Full 3rd Grade Benchmark (0 - 10)": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+    "Elementary All (0 - 12)": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "grades": {
+    "2": {
+      "title": "Grade 2 Scaffolding & Foundations",
+      "standards": [
+        {
+          "code": "2.OA.C.4",
+          "domain": "Operations and Algebraic Thinking",
+          "description": "Use addition to find the total number of objects arranged in rectangular arrays with up to 5 rows and up to 5 columns; write an equation to express the total as a sum of equal addends.",
+          "scaffold_notes": "Foundation for multiplication through repeated addition and visual rectangular arrays."
+        },
+        {
+          "code": "2.NBT.A.2",
+          "domain": "Number and Operations in Base Ten",
+          "description": "Count within 1000; skip-count by 5s, 10s, and 100s.",
+          "scaffold_notes": "Essential number-sense anchor for multiples of 2, 5, and 10."
+        }
+      ]
+    },
+    "3": {
+      "title": "Grade 3 Target Focus Standards",
+      "standards": [
+        {
+          "code": "3.OA.A.1",
+          "domain": "Operations and Algebraic Thinking",
+          "description": "Interpret products of whole numbers, e.g., interpret 5 × 7 as the total number of objects in 5 groups of 7 objects each.",
+          "classroom_focus": "Equal groups representation and conceptual grounding."
+        },
+        {
+          "code": "3.OA.A.3",
+          "domain": "Operations and Algebraic Thinking",
+          "description": "Use multiplication and division within 100 to solve word problems in situations involving equal groups, arrays, and measurement quantities.",
+          "classroom_focus": "Contextual problem-solving with arrays and equal groups."
+        },
+        {
+          "code": "3.OA.A.4",
+          "domain": "Operations and Algebraic Thinking",
+          "description": "Determine the unknown whole number in a multiplication or division equation relating three whole numbers. For example, determine the unknown number that makes the equation true in each of the equations 8 × ? = 48, 5 = _ ÷ 3, 6 × 6 = ?.",
+          "classroom_focus": "Algebraic thinking and missing factors in varied positions."
+        },
+        {
+          "code": "3.OA.B.5",
+          "domain": "Operations and Algebraic Thinking",
+          "description": "Apply properties of operations as strategies to multiply and divide. Examples: If 6 × 4 = 24 is known, then 4 × 6 = 24 is also known (Commutative property). 3 × 5 × 2 can be found by 3 × 10 = 30 (Associative property). Knowing that 8 × 5 = 40 and 8 × 2 = 16, 8 × 7 can be found as 8 × (5 + 2) = (8 × 5) + (8 × 2) = 40 + 16 = 56 (Distributive property).",
+          "classroom_focus": "Strategic derivation of facts using properties rather than rote memorization."
+        },
+        {
+          "code": "3.OA.B.6",
+          "domain": "Operations and Algebraic Thinking",
+          "description": "Understand division as an unknown-factor problem. For example, find 32 ÷ 8 by finding the number that makes 32 when multiplied by 8.",
+          "classroom_focus": "Inverse relationship between multiplication and division."
+        },
+        {
+          "code": "3.OA.C.7",
+          "domain": "Operations and Algebraic Thinking",
+          "description": "Fluently multiply and divide within 100, using strategies such as the relationship between multiplication and division or properties of operations. By the end of Grade 3, know from memory all products of two one-digit numbers.",
+          "classroom_focus": "Core fluency benchmark across 0-10 (and extensions 11-12)."
+        },
+        {
+          "code": "3.OA.D.9",
+          "domain": "Operations and Algebraic Thinking",
+          "description": "Identify arithmetic patterns (including patterns in the addition table or multiplication table), and explain them using properties of operations.",
+          "classroom_focus": "Recognizing even/odd patterns, digit sum rules on 9s, and doubling tables."
+        },
+        {
+          "code": "3.MD.C.7",
+          "domain": "Measurement and Data",
+          "description": "Relate area to the operations of multiplication and addition by tiling rectangular spaces and showing that area is additive.",
+          "classroom_focus": "Area models connecting visual geometry to multiplication decomposition."
+        }
+      ]
+    },
+    "4": {
+      "title": "Grade 4 Extension Standards",
+      "standards": [
+        {
+          "code": "4.OA.A.1",
+          "domain": "Operations and Algebraic Thinking",
+          "description": "Interpret a multiplication equation as a comparison, e.g., interpret 35 = 5 × 7 as a statement that 35 is 5 times as many as 7 and 7 times as many as 5.",
+          "extension_notes": "Multiplicative comparison thinking for advanced 3rd graders."
+        },
+        {
+          "code": "4.OA.B.4",
+          "domain": "Operations and Algebraic Thinking",
+          "description": "Find all factor pairs for a whole number in the range 1-100; recognize that a whole number is a multiple of each of its factors.",
+          "extension_notes": "Multiples and factors exploration."
+        },
+        {
+          "code": "4.NBT.B.5",
+          "domain": "Number and Operations in Base Ten",
+          "description": "Multiply a whole number of up to four digits by a one-digit whole number, and multiply two two-digit numbers, using strategies based on place value and the properties of operations.",
+          "extension_notes": "Foundation for 11s and 12s decomposition (12 × 4 = 10 × 4 + 2 × 4)."
+        }
+      ]
+    }
+  }
+}

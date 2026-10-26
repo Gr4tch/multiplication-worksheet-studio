@@ -35,7 +35,7 @@ def test_riddle_generator():
 def test_detective_generator():
     print("Testing detective generator...")
     det = build_detective_puzzle(target_numbers=[8, 9], is_half_page=False)
-    assert len(det["problems"]) == 10
+    assert len(det["problems"]) == 12
     errors = [p for p in det["problems"] if p["is_error"]]
     assert len(errors) == det["target_error_count"]
     print(f"[OK] Sneaky Pete generated with {len(errors)} authentic errors.")

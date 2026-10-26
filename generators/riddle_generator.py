@@ -1,13 +1,17 @@
 """
 Riddle / Secret Code Generator for Multiplication Practice.
 Maps unique letters of verified kid-friendly jokes to math facts.
+Supports Grade 2 scaffolds, Grade 3 core, and Grade 4 extensions.
 """
 
 import json
 import random
 from pathlib import Path
 from typing import Dict, Any, List, Optional
-from generators.math_engine import generate_multiplication_problem, get_strategy_tag
+from generators.math_engine import (
+    generate_multiplication_problem, get_strategy_tag,
+    generate_extension_challenge, generate_scaffold_support
+)
 
 DATA_DIR = Path(__file__).resolve().parent.parent / "data"
 
@@ -29,11 +33,13 @@ def build_riddle_puzzle(
     is_half_page: bool = False,
     include_missing_factors: bool = False,
     orientation: str = "horizontal",
+    differentiation_level: str = "core", # 'scaffold', 'core', 'extension'
+    problem_count_override: Optional[int] = None,
     seed: Optional[int] = None
 ) -> Dict[str, Any]:
     """
     Builds a complete Riddle / Secret Code puzzle.
-    Guarantees that each coded letter maps to a UNIQUE answer code.
+    In Full Page mode, generates a rich, balanced full-page layout with bonus facts and visual thinking tasks.
     """
     rng = random.Random(seed)
     candidates = get_jokes_by_category(category)
@@ -58,25 +64,21 @@ def build_riddle_puzzle(
             unique_letters.append(char)
 
     # Determine optimal problem count
-    max_problems = 8 if is_half_page else 14
-    min_problems = 6 if is_half_page else 10
-    
-    target_problem_count = min(len(unique_letters), max_problems)
-    if target_problem_count < min_problems and len(unique_letters) >= min_problems:
-        target_problem_count = min_problems
+    if problem_count_override:
+        target_problem_count = problem_count_override
+    else:
+        target_problem_count = 8 if is_half_page else 14
 
-    # Select the letters to be solved by math problems
-    coded_letters = unique_letters[:target_problem_count]
-    free_letters = unique_letters[target_problem_count:] # letters pre-filled if any
+    coded_letter_count = min(len(unique_letters), target_problem_count)
+    coded_letters = unique_letters[:coded_letter_count]
 
-    # Generate unique multiplication problems for each coded letter
     letter_to_problem = {}
     used_answers = set()
     used_factor_pairs = set()
     problems = []
 
+    # 1. Generate problems for the riddle letters
     for idx, letter in enumerate(coded_letters, 1):
-        # Find a problem with a unique answer
         attempts = 0
         problem = None
         while attempts < 100:
@@ -84,6 +86,7 @@ def build_riddle_puzzle(
                 target_numbers=target_numbers,
                 include_missing_factors=include_missing_factors,
                 orientation=orientation,
+                differentiation_level=differentiation_level,
                 rng=rng
             )
             ans = prob["answer"]
@@ -97,31 +100,46 @@ def build_riddle_puzzle(
             attempts += 1
             
         if problem is None:
-            # Fallback: allow duplicate factor pair if answer is unique
-            for p in range(0, 13):
-                t = rng.choice(target_numbers)
-                ans = t * p
-                if ans not in used_answers:
-                    used_answers.add(ans)
-                    problem = {
-                        "factor1": t,
-                        "factor2": p,
-                        "product": ans,
-                        "missing_pos": "product",
-                        "answer": ans,
-                        "prompt_str": f"{t} × {p} = ____",
-                        "display_orientation": orientation if orientation != "mixed" else "horizontal",
-                        "strategy": get_strategy_tag(t, p)
-                    }
-                    break
+            t = rng.choice(target_numbers)
+            p = rng.randint(1, 10 if differentiation_level == "scaffold" else 12)
+            ans = t * p
+            used_answers.add(ans)
+            problem = {
+                "factor1": t,
+                "factor2": p,
+                "product": ans,
+                "missing_pos": "product",
+                "answer": ans,
+                "prompt_str": f"{t} × {p} = ____",
+                "repeated_addition_hint": f"{p} + {p} + {p}..." if differentiation_level == "scaffold" else "",
+                "display_orientation": orientation if orientation != "mixed" else "horizontal",
+                "strategy": get_strategy_tag(t, p)
+            }
 
         problem["id"] = idx
         problem["letter"] = letter
+        problem["is_bonus"] = False
         letter_to_problem[letter] = problem
         problems.append(problem)
 
-    # Build blank slots for the punchline
-    # Each slot: {"char": 'E', "is_alpha": True, "code": 24, "prefilled": False}
+    # 2. In Full-Page mode, fill remaining slots up to target_problem_count with Bonus Practice Facts!
+    bonus_labels = ["★", "✦", "◆", "▲", "●", "■"]
+    while len(problems) < target_problem_count:
+        b_idx = len(problems) - coded_letter_count
+        b_label = bonus_labels[b_idx % len(bonus_labels)]
+        prob = generate_multiplication_problem(
+            target_numbers=target_numbers,
+            include_missing_factors=include_missing_factors,
+            orientation=orientation,
+            differentiation_level=differentiation_level,
+            rng=rng
+        )
+        prob["id"] = len(problems) + 1
+        prob["letter"] = b_label
+        prob["is_bonus"] = True
+        problems.append(prob)
+
+    # 3. Build blank slots for the punchline
     punchline_structure = []
     for word in words:
         word_structure = []
@@ -151,6 +169,15 @@ def build_riddle_puzzle(
                 })
         punchline_structure.append(word_structure)
 
+    # 4. Scaffolds and Extensions metadata
+    extension_challenge = None
+    scaffold_support = None
+    if not is_half_page:
+        if differentiation_level == "extension":
+            extension_challenge = generate_extension_challenge(target_numbers, rng)
+        elif differentiation_level == "scaffold":
+            scaffold_support = generate_scaffold_support(target_numbers)
+
     return {
         "type": "riddle",
         "joke_id": selected_joke["id"],
@@ -159,5 +186,9 @@ def build_riddle_puzzle(
         "punchline": punchline,
         "problems": problems,
         "punchline_structure": punchline_structure,
-        "is_half_page": is_half_page
+        "is_half_page": is_half_page,
+        "differentiation_level": differentiation_level,
+        "extension_challenge": extension_challenge,
+        "scaffold_support": scaffold_support,
+        "show_thinking": (not is_half_page and differentiation_level == "core")
     }

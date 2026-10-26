@@ -1,7 +1,7 @@
 """
 ReportLab PDF Generation Engine for Printable Math Worksheets.
 Generates vector-crisp, ink-friendly 8.5x11 B&W PDFs for school printing.
-Matches preview canvas layout 1:1 and guarantees multi-form answer keys.
+Matches preview canvas layout 1:1, fills Full-Page completely, and supports differentiation scaffolds/extensions.
 """
 
 import io
@@ -22,6 +22,7 @@ def create_worksheet_pdf(
     include_strategy_box: bool = True,
     strategy_info: Optional[Dict[str, Any]] = None,
     include_answer_key: bool = True,
+    differentiation_level: str = "core",
     font_choice: str = "Helvetica"
 ) -> bytes:
     """
@@ -30,7 +31,6 @@ def create_worksheet_pdf(
     buffer = io.BytesIO()
     
     # 8.5 x 11 inches: 612 x 792 points
-    # 0.35 inch margins (25.2 pt) maximize usable printable space
     margin = 0.35 * inch
     doc = SimpleDocTemplate(
         buffer,
@@ -46,7 +46,6 @@ def create_worksheet_pdf(
 
     styles = getSampleStyleSheet()
     
-    # Dynamic styles based on layout mode (compact for half-page)
     title_size = 12 if is_half_page else 15
     title_leading = 14 if is_half_page else 18
     body_size = 8 if is_half_page else 9
@@ -60,7 +59,7 @@ def create_worksheet_pdf(
         fontName='Helvetica-Bold',
         fontSize=title_size,
         leading=title_leading,
-        alignment=1, # Center
+        alignment=1,
         spaceAfter=2 if is_half_page else 4
     )
     
@@ -91,14 +90,9 @@ def create_worksheet_pdf(
     title_text = (custom_title or puzzle_data.get("title") or "Multiplication Fact Practice").upper()
 
     def build_punchline_table(struct: List[List[Dict[str, Any]]], max_width: float) -> List[Table]:
-        """
-        Builds horizontal word lines for the punchline cipher.
-        Guarantees numbers never wrap vertically and words flow horizontally side-by-side.
-        """
         slot_w = 20 if is_half_page else 24
         gap_w = 12 if is_half_page else 16
         
-        # Split words into lines that fit within max_width
         lines = []
         current_line_words = []
         current_line_width = 0
@@ -129,7 +123,7 @@ def create_worksheet_pdf(
                 for slot in word:
                     col_widths.append(slot_w)
                     if slot["is_alpha"]:
-                        row_letters.append("") # Student writes letter here
+                        row_letters.append("")
                         row_codes.append(str(slot["code"]))
                         underline_styles.append(('LINEBELOW', (col_idx, 0), (col_idx, 0), 1.5, colors.black))
                     else:
@@ -137,7 +131,6 @@ def create_worksheet_pdf(
                         row_codes.append("")
                     col_idx += 1
 
-                # Add word gap if not last word in line
                 if w_idx < len(line_words) - 1:
                     col_widths.append(gap_w)
                     row_letters.append("")
@@ -161,8 +154,8 @@ def create_worksheet_pdf(
         return tables
 
     def render_single_worksheet_flowables(p_data, form_label="") -> List[Any]:
-        """Renders all elements of a single worksheet inside a clean card."""
         f = []
+        inner_width = printable_width - (16 if is_half_page else 24)
         
         # 1. Student Header
         hdr_table_data = [[
@@ -170,7 +163,6 @@ def create_worksheet_pdf(
             Paragraph("<b>Class/Room:</b> _______", header_style),
             Paragraph("<b>Date:</b> _________", header_style)
         ]]
-        inner_width = printable_width - (16 if is_half_page else 24)
         col_w = inner_width / 3
         hdr_table = Table(hdr_table_data, colWidths=[col_w * 1.3, col_w * 0.8, col_w * 0.9])
         hdr_table.setStyle(TableStyle([
@@ -184,18 +176,22 @@ def create_worksheet_pdf(
         f.append(hdr_table)
         f.append(Spacer(1, 3 if is_half_page else 6))
         
-        # 2. Title
+        # 2. Title & Level Badge
         full_title = f"{title_text} {form_label}".strip()
         f.append(Paragraph(full_title, title_style))
         f.append(Spacer(1, 2 if is_half_page else 4))
         
-        # 3. Clear Math Strategy Box (if enabled)
+        # 3. Kid-Friendly Clear Math Strategy Box (if enabled)
         if include_strategy_box and strategy_info:
+            kid_name = strategy_info.get("kid_title", "Clear Math Tip")
             tip = strategy_info.get("student_tip", "")
-            hint = strategy_info.get("visual_hint", "")
-            strat_table_data = [[
-                Paragraph(f"<b>💡 Clear Math Strategy Tip:</b> {tip}<br/><b>📐 Visual Anchor:</b> {hint}", story_style)
-            ]]
+            skip_line = strategy_info.get("skip_count_line", "")
+            
+            strat_content = f"<b>{kid_name}</b> {tip}"
+            if skip_line:
+                strat_content += f"<br/><b>👉 Skip-Counting Track:</b> <font face='Helvetica-Bold'>{skip_line}</font>"
+                
+            strat_table_data = [[Paragraph(strat_content, story_style)]]
             strat_table = Table(strat_table_data, colWidths=[inner_width])
             strat_table.setStyle(TableStyle([
                 ('BOX', (0,0), (-1,-1), 1, colors.black),
@@ -208,34 +204,34 @@ def create_worksheet_pdf(
             f.append(strat_table)
             f.append(Spacer(1, 3 if is_half_page else 6))
 
-        # 4. Puzzle Specific Content
+        # 4. Activity Body
         ptype = p_data.get("type")
         
         if ptype == "riddle":
-            # Riddle Prompt
             q_text = f"<b>MISSION RIDDLE:</b> <i>\"{p_data.get('question')}\"</i>"
             f.append(Paragraph(q_text, header_style))
             f.append(Paragraph("Solve the multiplication facts below. Match your answers to the letter codes to decode the secret punchline!", story_style))
-            f.append(Spacer(1, 3 if is_half_page else 5))
+            f.append(Spacer(1, 3 if is_half_page else 6))
             
-            # Problems Grid (2 columns)
             prob_items = p_data.get("problems", [])
             table_rows = []
             for i in range(0, len(prob_items), 2):
                 p1 = prob_items[i]
                 p2 = prob_items[i+1] if i+1 < len(prob_items) else None
                 
-                # Inverted badge formatting matching the preview canvas
-                badge1 = f"<font color='white' backcolor='black'><b>&nbsp;{p1.get('letter')}&nbsp;</b></font>&nbsp;&nbsp;{p1.get('prompt_str')}"
-                badge2 = f"<font color='white' backcolor='black'><b>&nbsp;{p2.get('letter')}&nbsp;</b></font>&nbsp;&nbsp;{p2.get('prompt_str')}" if p2 else ""
+                hint1 = f"<br/><font size='7' color='gray'>[think: {p1['repeated_addition_hint']}]</font>" if p1.get('repeated_addition_hint') else ""
+                hint2 = f"<br/><font size='7' color='gray'>[think: {p2['repeated_addition_hint']}]</font>" if p2 and p2.get('repeated_addition_hint') else ""
+                
+                badge1 = f"<font color='white' backcolor='black'><b>&nbsp;{p1.get('letter')}&nbsp;</b></font>&nbsp;&nbsp;{p1.get('prompt_str')}{hint1}"
+                badge2 = f"<font color='white' backcolor='black'><b>&nbsp;{p2.get('letter')}&nbsp;</b></font>&nbsp;&nbsp;{p2.get('prompt_str')}{hint2}" if p2 else ""
                 table_rows.append([Paragraph(badge1, problem_style), Paragraph(badge2, problem_style)])
                 
             p_col_w = inner_width / 2
             prob_table = Table(table_rows, colWidths=[p_col_w, p_col_w])
             prob_table.setStyle(TableStyle([
                 ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
-                ('BOTTOMPADDING', (0,0), (-1,-1), 2 if is_half_page else 5),
-                ('TOPPADDING', (0,0), (-1,-1), 2 if is_half_page else 5),
+                ('BOTTOMPADDING', (0,0), (-1,-1), 2 if is_half_page else 4),
+                ('TOPPADDING', (0,0), (-1,-1), 2 if is_half_page else 4),
                 ('LEFTPADDING', (0,0), (-1,-1), 4),
                 ('RIGHTPADDING', (0,0), (-1,-1), 4),
             ]))
@@ -255,14 +251,69 @@ def create_worksheet_pdf(
             punch_card = Table([[punchline_box_items]], colWidths=[inner_width])
             punch_card.setStyle(TableStyle([
                 ('BOX', (0,0), (-1,-1), 1, colors.black),
-                ('LINEBEFORE', (0,0), (-1,-1), 1, colors.black),
-                ('TOPPADDING', (0,0), (-1,-1), 3 if is_half_page else 6),
-                ('BOTTOMPADDING', (0,0), (-1,-1), 3 if is_half_page else 6),
+                ('TOPPADDING', (0,0), (-1,-1), 3 if is_half_page else 5),
+                ('BOTTOMPADDING', (0,0), (-1,-1), 3 if is_half_page else 5),
                 ('LEFTPADDING', (0,0), (-1,-1), 8),
                 ('RIGHTPADDING', (0,0), (-1,-1), 8),
                 ('BACKGROUND', (0,0), (-1,-1), colors.Color(0.99, 0.99, 0.99)),
             ]))
             f.append(punch_card)
+
+            # 5. Full-Page Bottom Enrichment (Grade 4 Extension / Grade 2 Scaffold / Show Your Thinking)
+            if not is_half_page:
+                f.append(Spacer(1, 8))
+                if p_data.get("extension_challenge"):
+                    ext = p_data["extension_challenge"]
+                    ext_content = [
+                        Paragraph(f"{ext['prompt']}", story_style),
+                        Spacer(1, 4),
+                        Paragraph(f"<b>{ext['equation_blank']}</b>", problem_style)
+                    ]
+                    ext_card = Table([[ext_content]], colWidths=[inner_width])
+                    ext_card.setStyle(TableStyle([
+                        ('BOX', (0,0), (-1,-1), 1.5, colors.black),
+                        ('BACKGROUND', (0,0), (-1,-1), colors.Color(0.96, 0.96, 0.96)),
+                        ('TOPPADDING', (0,0), (-1,-1), 6),
+                        ('BOTTOMPADDING', (0,0), (-1,-1), 6),
+                        ('LEFTPADDING', (0,0), (-1,-1), 8),
+                        ('RIGHTPADDING', (0,0), (-1,-1), 8),
+                    ]))
+                    f.append(ext_card)
+                elif p_data.get("scaffold_support"):
+                    scaf = p_data["scaffold_support"]
+                    scaf_content = [
+                        Paragraph(f"<b>{scaf['title']}</b> (WA CCSS 2.OA.C.4 Repeated Addition & Arrays)", header_style),
+                        Spacer(1, 3),
+                        Paragraph(f"<b>Visual Model:</b> {scaf['dots_visual']}", story_style),
+                        Paragraph(f"<b>Repeated Addition:</b> {scaf['repeated_addition_example']}", story_style)
+                    ]
+                    scaf_card = Table([[scaf_content]], colWidths=[inner_width])
+                    scaf_card.setStyle(TableStyle([
+                        ('BOX', (0,0), (-1,-1), 1.5, colors.black),
+                        ('BACKGROUND', (0,0), (-1,-1), colors.Color(0.96, 0.96, 0.96)),
+                        ('TOPPADDING', (0,0), (-1,-1), 6),
+                        ('BOTTOMPADDING', (0,0), (-1,-1), 6),
+                        ('LEFTPADDING', (0,0), (-1,-1), 8),
+                        ('RIGHTPADDING', (0,0), (-1,-1), 8),
+                    ]))
+                    f.append(scaf_card)
+                elif p_data.get("show_thinking"):
+                    # Array Sketching Box
+                    think_content = [
+                        Paragraph("<b>🎨 SHOW YOUR THINKING:</b> Pick any fact from above. In the space below, sketch a <b>rectangular array</b> (rows × columns) to model your answer!", header_style),
+                        Spacer(1, 30), # Generous 30pt drawing room
+                        Paragraph("<font size='7' color='gray'>Fact chosen: _____ × _____ = _____ | Number of Rows: _____ | Number of Columns: _____</font>", story_style)
+                    ]
+                    think_card = Table([[think_content]], colWidths=[inner_width])
+                    think_card.setStyle(TableStyle([
+                        ('BOX', (0,0), (-1,-1), 1, colors.black),
+                        ('LINEBEFORE', (0,0), (-1,-1), 1, colors.black),
+                        ('TOPPADDING', (0,0), (-1,-1), 6),
+                        ('BOTTOMPADDING', (0,0), (-1,-1), 6),
+                        ('LEFTPADDING', (0,0), (-1,-1), 8),
+                        ('RIGHTPADDING', (0,0), (-1,-1), 8),
+                    ]))
+                    f.append(think_card)
 
         elif ptype == "detective":
             f.append(Paragraph(f"<b>🕵️ DETECTIVE BRIEFING:</b> {p_data.get('mission_brief')}", story_style))
@@ -272,9 +323,11 @@ def create_worksheet_pdf(
             det_rows = [["#", "Pete's Solved Equation", "Your Verdict", "True Product (if wrong)"]]
             for p in probs:
                 eq_str = f"{p['factor1']} × {p['factor2']} = {p['displayed_answer']}"
+                if p.get("repeated_addition_hint"):
+                    eq_str += f"<br/><font size='7' color='gray'>[think: {p['repeated_addition_hint']}]</font>"
                 det_rows.append([
                     str(p["id"]),
-                    eq_str,
+                    Paragraph(eq_str, story_style),
                     "○ Correct   ○ Mistake",
                     "_________________"
                 ])
@@ -293,6 +346,42 @@ def create_worksheet_pdf(
             ]))
             f.append(t_detective)
 
+            if not is_half_page:
+                f.append(Spacer(1, 8))
+                if p_data.get("extension_challenge"):
+                    ext = p_data["extension_challenge"]
+                    ext_content = [
+                        Paragraph(f"{ext['prompt']}", story_style),
+                        Spacer(1, 4),
+                        Paragraph(f"<b>{ext['equation_blank']}</b>", problem_style)
+                    ]
+                    ext_card = Table([[ext_content]], colWidths=[inner_width])
+                    ext_card.setStyle(TableStyle([
+                        ('BOX', (0,0), (-1,-1), 1.5, colors.black),
+                        ('BACKGROUND', (0,0), (-1,-1), colors.Color(0.96, 0.96, 0.96)),
+                        ('TOPPADDING', (0,0), (-1,-1), 6),
+                        ('BOTTOMPADDING', (0,0), (-1,-1), 6),
+                        ('LEFTPADDING', (0,0), (-1,-1), 8),
+                        ('RIGHTPADDING', (0,0), (-1,-1), 8),
+                    ]))
+                    f.append(ext_card)
+                elif p_data.get("case_notes_prompt"):
+                    notes_content = [
+                        Paragraph("<b>📝 DETECTIVE CASE LOG (SMP 3 Reasoning):</b> Pick one of Pete's mistakes above (Problem #___). In the space below, explain <i>why</i> his answer was incorrect, and show how to solve it correctly:", header_style),
+                        Spacer(1, 24),
+                        Paragraph("Explanation: ________________________________________________________________________________________________", story_style),
+                        Paragraph("Correct Math Strategy: ____________________________________________________________________________________", story_style)
+                    ]
+                    notes_card = Table([[notes_content]], colWidths=[inner_width])
+                    notes_card.setStyle(TableStyle([
+                        ('BOX', (0,0), (-1,-1), 1, colors.black),
+                        ('TOPPADDING', (0,0), (-1,-1), 6),
+                        ('BOTTOMPADDING', (0,0), (-1,-1), 6),
+                        ('LEFTPADDING', (0,0), (-1,-1), 8),
+                        ('RIGHTPADDING', (0,0), (-1,-1), 8),
+                    ]))
+                    f.append(notes_card)
+
         elif ptype == "maze":
             f.append(Paragraph(f"<b>🚀 MAZE CHALLENGE:</b> {p_data.get('instructions')}", story_style))
             f.append(Spacer(1, 3 if is_half_page else 6))
@@ -301,7 +390,7 @@ def create_worksheet_pdf(
             r_count = len(grid)
             c_count = len(grid[0]) if r_count > 0 else 0
             
-            cell_size = 40 if is_half_page else 52
+            cell_size = 40 if is_half_page else 48
             maze_rows = []
             for r in range(r_count):
                 row_items = []
@@ -321,11 +410,46 @@ def create_worksheet_pdf(
                 ('ALIGN', (0,0), (-1,-1), 'CENTER'),
                 ('VALIGN', (0,0), (-1,-1), 'MIDDLE'),
                 ('FONTNAME', (0,0), (-1,-1), 'Helvetica-Bold'),
-                ('FONTSIZE', (0,0), (-1,-1), 7 if is_half_page else 9),
+                ('FONTSIZE', (0,0), (-1,-1), 7 if is_half_page else 8),
             ]))
             f.append(t_maze)
-            
-        # Wrap all flowables into an outer card matching preview
+
+            if not is_half_page:
+                f.append(Spacer(1, 8))
+                if p_data.get("extension_challenge"):
+                    ext = p_data["extension_challenge"]
+                    ext_content = [
+                        Paragraph(f"{ext['prompt']}", story_style),
+                        Spacer(1, 4),
+                        Paragraph(f"<b>{ext['equation_blank']}</b>", problem_style)
+                    ]
+                    ext_card = Table([[ext_content]], colWidths=[inner_width])
+                    ext_card.setStyle(TableStyle([
+                        ('BOX', (0,0), (-1,-1), 1.5, colors.black),
+                        ('BACKGROUND', (0,0), (-1,-1), colors.Color(0.96, 0.96, 0.96)),
+                        ('TOPPADDING', (0,0), (-1,-1), 6),
+                        ('BOTTOMPADDING', (0,0), (-1,-1), 6),
+                        ('LEFTPADDING', (0,0), (-1,-1), 8),
+                        ('RIGHTPADDING', (0,0), (-1,-1), 8),
+                    ]))
+                    f.append(ext_card)
+                elif p_data.get("checkpoint_prompt"):
+                    check_content = [
+                        Paragraph("<b>🏁 MULTIPLES CHECKPOINT:</b> List 5 multiples you discovered along your path from lowest to highest:", header_style),
+                        Spacer(1, 6),
+                        Paragraph("1) ________&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2) ________&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;3) ________&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4) ________&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5) ________", problem_style)
+                    ]
+                    check_card = Table([[check_content]], colWidths=[inner_width])
+                    check_card.setStyle(TableStyle([
+                        ('BOX', (0,0), (-1,-1), 1, colors.black),
+                        ('TOPPADDING', (0,0), (-1,-1), 6),
+                        ('BOTTOMPADDING', (0,0), (-1,-1), 6),
+                        ('LEFTPADDING', (0,0), (-1,-1), 8),
+                        ('RIGHTPADDING', (0,0), (-1,-1), 8),
+                    ]))
+                    f.append(check_card)
+
+        # Outer card box matching preview
         outer_card = Table([[f]], colWidths=[printable_width])
         outer_card.setStyle(TableStyle([
             ('BOX', (0,0), (-1,-1), 1.5, colors.black),
@@ -337,22 +461,19 @@ def create_worksheet_pdf(
         ]))
         return [outer_card]
 
-    # --- DOCUMENT ASSEMBLY ---
+    # Assembly
     story = []
     
     if layout_mode == "full_page":
         story.extend(render_single_worksheet_flowables(puzzle_data))
     else:
-        # Paper-Saver 2-Up Mode (Twin or Form A & B)
         label_a = "(FORM A)" if layout_mode == "half_page_ab" else "(COPY 1)"
         label_b = "(FORM B)" if layout_mode == "half_page_ab" else "(COPY 2)"
         data_b = form_b_data if (layout_mode == "half_page_ab" and form_b_data) else puzzle_data
         
-        # 1. Top Card
         story.extend(render_single_worksheet_flowables(puzzle_data, label_a))
         story.append(Spacer(1, 4))
         
-        # 2. Clean Center Cut Line Table
         cut_msg = "✂ CUT HERE (TWIN COPIES) ✂" if layout_mode == "half_page_twin" else "✂ CUT HERE (ANTI-PEEKING FORM A & B) ✂"
         cut_table = Table([[
             Paragraph(f"<font color='black'>- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - &nbsp;&nbsp;<b>{cut_msg}</b>&nbsp;&nbsp; - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -</font>", ParagraphStyle('CutStyle', parent=styles['Normal'], alignment=1, fontSize=7, leading=8))
@@ -365,11 +486,9 @@ def create_worksheet_pdf(
         ]))
         story.append(cut_table)
         story.append(Spacer(1, 4))
-        
-        # 3. Bottom Card
         story.extend(render_single_worksheet_flowables(data_b, label_b))
 
-    # --- TEACHER ANSWER KEY PAGE ---
+    # Teacher Answer Key
     if include_answer_key:
         story.append(PageBreak())
         story.append(Paragraph("TEACHER ANSWER KEY & PEDAGOGICAL ALIGNMENT", title_style))
@@ -449,7 +568,7 @@ def create_worksheet_pdf(
                             row_items.append(grid[r][c]['text'])
                     disp_rows.append(row_items)
                     
-                c_size = 38 if is_half_page else 45
+                c_size = 35 if is_half_page else 42
                 t_sol = Table(disp_rows, colWidths=[c_size]*len(grid[0]), rowHeights=[c_size]*len(grid), hAlign='CENTER')
                 t_sol.setStyle(TableStyle([
                     ('BOX', (0,0), (-1,-1), 1.5, colors.black),
@@ -460,10 +579,13 @@ def create_worksheet_pdf(
                 ]))
                 f_ak.append(t_sol)
 
+            if p_data.get("extension_challenge"):
+                f_ak.append(Spacer(1, 4))
+                f_ak.append(Paragraph(f"<b>Grade 4 Star Challenge Solution:</b> {p_data['extension_challenge']['solution']}", header_style))
+
             return f_ak
 
         if layout_mode == "half_page_ab" and form_b_data:
-            # Render BOTH Form A and Form B Keys
             story.extend(render_answer_key_content(puzzle_data, "FORM A (TOP HALF) ANSWER KEY"))
             story.append(Spacer(1, 8))
             story.append(Paragraph("<font color='black'>- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -</font>", ParagraphStyle('AKDivider', alignment=1, fontSize=6, leading=6)))

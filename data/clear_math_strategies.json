@@ -1,82 +1,108 @@
 {
   "strategies": {
     "0": {
-      "name": "Zero Property of Multiplication",
+      "name": "Zero Property",
+      "kid_title": "💥 The Zap-to-Zero Rule!",
       "cluster": "Foundations",
-      "student_tip": "Any number multiplied by 0 is always 0! Imagine 5 empty bags—you have 0 items.",
-      "visual_hint": "0 groups of anything = 0 total"
+      "student_tip": "Any number multiplied by 0 gets zapped to 0! Imagine 5 empty plates—you still have 0 cookies! (0 × 7 = 0)",
+      "skip_count_line": "0, 0, 0, 0, 0... (It's always zero!)",
+      "scaffold_hint": "0 groups of anything = 0 total"
     },
     "1": {
-      "name": "Identity Property of Multiplication",
+      "name": "Identity Property",
+      "kid_title": "🪞 The Mirror Rule!",
       "cluster": "Foundations",
-      "student_tip": "Any number multiplied by 1 stays the exact same number! 1 group of 8 is just 8.",
-      "visual_hint": "1 × n = n (Identity Property)"
+      "student_tip": "Multiplying by 1 looks in the mirror and sees itself! The number never changes: 1 × 8 = 8.",
+      "skip_count_line": "1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12",
+      "scaffold_hint": "1 group of 8 is just 8"
     },
     "2": {
-      "name": "Doubles Strategy",
+      "name": "Doubles",
+      "kid_title": "👯 Just Double It!",
       "cluster": "Doubles",
-      "student_tip": "Multiplying by 2 is just doubling the other number! (e.g., 2 × 6 is 6 + 6 = 12).",
-      "visual_hint": "Double it! 2 × n = n + n"
+      "student_tip": "Multiplying by 2 is just doubling the number! For 2 × 6, think: 6 + 6 = 12.",
+      "skip_count_line": "2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24",
+      "scaffold_hint": "2 × 6 means 6 + 6"
     },
     "3": {
       "name": "Double Plus One Group",
+      "kid_title": "➕ Double Plus 1 More Group!",
       "cluster": "Derived",
-      "student_tip": "To multiply by 3, double the number first, then add one more group! (3 × 7 = 14 + 7 = 21).",
-      "visual_hint": "3 × n = (2 × n) + n"
+      "student_tip": "Double the number first, then add one more group! For 3 × 7: double 7 is 14, and 14 + 7 = 21!",
+      "skip_count_line": "3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36",
+      "scaffold_hint": "3 × 7 means (7 + 7) + 7 = 14 + 7 = 21"
     },
     "4": {
       "name": "Double and Double Again",
+      "kid_title": "⚡ The Double-Double Trick!",
       "cluster": "Doubles",
-      "student_tip": "To multiply by 4, double the number, then double it again! (4 × 6: double 6 is 12, double 12 is 24!).",
-      "visual_hint": "4 × n = 2 × (2 × n)"
+      "student_tip": "Double the number, then double it again! For 4 × 6: double 6 is 12, and double 12 is 24!",
+      "skip_count_line": "4, 8, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48",
+      "scaffold_hint": "4 × 6 means double 6 (12), then double 12 (24)"
     },
     "5": {
-      "name": "Clock / Half-of-Ten Strategy",
+      "name": "Clock / Nickel Counting",
+      "kid_title": "⏰ Clock & Nickel Counting!",
       "cluster": "Foundations",
-      "student_tip": "Multiplying by 5 always ends in 0 or 5. Think of the minute hand on a clock or half of 10!",
-      "visual_hint": "Skip-count by 5s or take half of (10 × n)"
+      "student_tip": "Skip-count by 5s like the minutes on a clock or counting nickels! Every answer ends in 0 or 5.",
+      "skip_count_line": "5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60",
+      "scaffold_hint": "5 × 4 means 5, 10, 15, 20 (ends in 0 or 5)"
     },
     "6": {
-      "name": "Five Plus One Group (or Double 3s)",
+      "name": "Five Plus One Group",
+      "kid_title": "🖐️ High-Five Plus 1 Group!",
       "cluster": "Derived",
-      "student_tip": "To multiply by 6, find the 5s fact first, then add one more group! (6 × 7 = (5 × 7) + 7 = 35 + 7 = 42).",
-      "visual_hint": "6 × n = (5 × n) + n"
+      "student_tip": "Do your friendly 5s fact first, then add one more group! For 6 × 7: (5 × 7 is 35), plus 7 more = 42!",
+      "skip_count_line": "6, 12, 18, 24, 30, 36, 42, 48, 54, 60, 66, 72",
+      "scaffold_hint": "6 × 7 means (5 × 7 = 35) + 7 = 42"
     },
     "7": {
-      "name": "Decompose into 5s and 2s (Distributive Property)",
+      "name": "The 5 + 2 Split",
+      "kid_title": "🧩 The 5 + 2 Split Trick!",
       "cluster": "Derived",
-      "student_tip": "Break 7 into 5 and 2! (7 × 8 = (5 × 8) + (2 × 8) = 40 + 16 = 56).",
-      "visual_hint": "7 × n = (5 × n) + (2 × n)"
+      "student_tip": "Split 7 into 5 and 2! For 7 × 8: (5 × 8 = 40) and (2 × 8 = 16), then add 40 + 16 = 56!",
+      "skip_count_line": "7, 14, 21, 28, 35, 42, 49, 56, 63, 70, 77, 84",
+      "scaffold_hint": "7 × 8 means (5 × 8 = 40) plus (2 × 8 = 16) = 56"
     },
     "8": {
       "name": "Double-Double-Double",
+      "kid_title": "🚀 Double-Double-Double!",
       "cluster": "Doubles",
-      "student_tip": "To multiply by 8, double three times! Or think: 8 × n = (5 × n) + (3 × n).",
-      "visual_hint": "8 × n = 2 × 2 × 2 × n"
+      "student_tip": "Double three times in a row! For 8 × 3: double 3 is 6, double 6 is 12, and double 12 is 24!",
+      "skip_count_line": "8, 16, 24, 32, 40, 48, 56, 64, 72, 80, 88, 96",
+      "scaffold_hint": "8 × 3 means 3 → 6 → 12 → 24 (doubled 3 times)"
     },
     "9": {
-      "name": "Ten Minus One Group (or Digits Sum to 9)",
+      "name": "Ten Minus One Group",
+      "kid_title": "🔟 Ten Minus 1 Group!",
       "cluster": "Derived",
-      "student_tip": "To multiply by 9, multiply by 10 first and subtract 1 group! (9 × 6 = 60 - 6 = 54. Notice 5 + 4 = 9!).",
-      "visual_hint": "9 × n = (10 × n) - n"
+      "student_tip": "Multiply by 10 first, then take away 1 group! For 9 × 6: (10 × 6 is 60), minus 6 is 54! (Notice: 5 + 4 = 9!)",
+      "skip_count_line": "9, 18, 27, 36, 45, 54, 63, 72, 81, 90, 99, 108",
+      "scaffold_hint": "9 × 6 means (10 × 6 = 60) - 6 = 54"
     },
     "10": {
-      "name": "Place-Value Shift",
+      "name": "Place Value Slide",
+      "kid_title": "🎯 The Zero-Slide Trick!",
       "cluster": "Foundations",
-      "student_tip": "Multiplying by 10 shifts the digits one place value to the left (ends in a zero).",
-      "visual_hint": "10 × n = n tens"
+      "student_tip": "Slide the number to the tens place and add a zero to the end! For 10 × 7, just write 70!",
+      "skip_count_line": "10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120",
+      "scaffold_hint": "10 × 7 means 7 tens = 70"
     },
     "11": {
-      "name": "Ten Plus One Group",
+      "name": "Twin Digits Trick",
+      "kid_title": "👯‍♀️ The Twin Digits Trick!",
       "cluster": "Upper",
-      "student_tip": "To multiply by 11, multiply by 10 first, then add one more group! (11 × 4 = 40 + 4 = 44).",
-      "visual_hint": "11 × n = (10 × n) + n"
+      "student_tip": "For single digits, just repeat the digit twice! 11 × 4 = 44, and 11 × 7 = 77! (Or think: 10 groups + 1 group).",
+      "skip_count_line": "11, 22, 33, 44, 55, 66, 77, 88, 99, 110, 121, 132",
+      "scaffold_hint": "11 × 4 means (10 × 4 = 40) + 4 = 44"
     },
     "12": {
-      "name": "Ten Plus Two Groups (Decomposition)",
+      "name": "Ten Plus Two Split",
+      "kid_title": "📦 The 10 + 2 Split Trick!",
       "cluster": "Upper",
-      "student_tip": "To multiply by 12, break 12 into 10 and 2! (12 × 5 = (10 × 5) + (2 × 5) = 50 + 10 = 60).",
-      "visual_hint": "12 × n = (10 × n) + (2 × n)"
+      "student_tip": "Split 12 into 10 and 2! For 12 × 5: (10 × 5 = 50) plus (2 × 5 = 10), and 50 + 10 = 60!",
+      "skip_count_line": "12, 24, 36, 48, 60, 72, 84, 96, 108, 120, 132, 144",
+      "scaffold_hint": "12 × 5 means (10 × 5 = 50) + (2 × 5 = 10) = 60"
     }
   },
   "preset_clusters": {

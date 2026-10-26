@@ -454,33 +454,48 @@ col_exp1, col_exp2 = st.columns(2)
 
 with col_exp1:
     with st.expander("🔑 Teacher Answer Key & Solution Notes", expanded=False):
-        ptype = puzzle_data_a.get("type")
-        if ptype == "riddle":
-            st.markdown(f"**Question:** *{puzzle_data_a.get('question')}*")
-            st.markdown(f"**Solved Punchline:** `{puzzle_data_a.get('punchline')}`")
-            st.table([
-                {
-                    "Letter": p.get("letter"),
-                    "Equation": f"{p['factor1']} × {p['factor2']} = {p['product']}",
-                    "Code Value": p.get("answer"),
-                    "Strategy": p.get("strategy")
-                }
-                for p in puzzle_data_a.get("problems", [])
-            ])
-        elif ptype == "detective":
-            st.markdown("**Sneaky Pete Error Analysis:**")
-            st.table([
-                {
-                    "#": p["id"],
-                    "Pete's Equation": f"{p['factor1']} × {p['factor2']} = {p['displayed_answer']}",
-                    "Verdict": "MISTAKE" if p["is_error"] else "CORRECT",
-                    "True Product": p["correct_answer"],
-                    "Misconception / Reasoning": p["error_reason"]
-                }
-                for p in puzzle_data_a.get("problems", [])
-            ])
+        def render_ak_ui(p_data, label: str):
+            if label:
+                st.markdown(f"#### {label}")
+            ptype = p_data.get("type")
+            if ptype == "riddle":
+                st.markdown(f"**Question:** *{p_data.get('question')}*")
+                st.markdown(f"**Solved Punchline:** `{p_data.get('punchline')}`")
+                st.table([
+                    {
+                        "Letter": p.get("letter"),
+                        "Equation": f"{p['factor1']} × {p['factor2']} = {p['product']}",
+                        "Code Value": p.get("answer"),
+                        "Strategy": p.get("strategy")
+                    }
+                    for p in p_data.get("problems", [])
+                ])
+            elif ptype == "detective":
+                st.markdown("**Sneaky Pete Error Analysis:**")
+                st.table([
+                    {
+                        "#": p["id"],
+                        "Pete's Equation": f"{p['factor1']} × {p['factor2']} = {p['displayed_answer']}",
+                        "Verdict": "MISTAKE" if p["is_error"] else "CORRECT",
+                        "True Product": p["correct_answer"],
+                        "Misconception / Reasoning": p["error_reason"]
+                    }
+                    for p in p_data.get("problems", [])
+                ])
+            else:
+                st.markdown(f"**Pathfinder Coordinates (Row, Col):** `{p_data.get('path_coords')}`")
+
+        if layout_code == "half_page_ab":
+            tab_a, tab_b = st.tabs(["Form A (Top Half)", "Form B (Bottom Half)"])
+            with tab_a:
+                render_ak_ui(puzzle_data_a, "Form A Solution Key")
+            with tab_b:
+                render_ak_ui(puzzle_data_b, "Form B Solution Key")
+        elif layout_code == "half_page_twin":
+            st.info("ℹ️ Twin Copies Mode: Copy 1 and Copy 2 are identical.")
+            render_ak_ui(puzzle_data_a, "Twin Copies Answer Key")
         else:
-            st.markdown(f"**Pathfinder Coordinates (Row, Col):** `{puzzle_data_a.get('path_coords')}`")
+            render_ak_ui(puzzle_data_a, "")
 
 with col_exp2:
     with st.expander("📐 WA CCSS-M Standards & Clear Math Pacing", expanded=False):

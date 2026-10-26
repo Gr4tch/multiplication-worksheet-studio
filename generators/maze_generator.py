@@ -48,7 +48,8 @@ def build_maze_puzzle(
     target_numbers: List[int],
     is_half_page: bool = False,
     differentiation_level: str = "core",
-    seed: Optional[int] = None
+    seed: Optional[int] = None,
+    **kwargs
 ) -> Dict[str, Any]:
     """Builds a complete Pathfinder Maze puzzle."""
     rng = random.Random(seed)

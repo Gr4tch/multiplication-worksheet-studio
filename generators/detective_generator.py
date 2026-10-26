@@ -59,7 +59,8 @@ def build_detective_puzzle(
     orientation: str = "horizontal",
     differentiation_level: str = "core",
     problem_count_override: Optional[int] = None,
-    seed: Optional[int] = None
+    seed: Optional[int] = None,
+    **kwargs
 ) -> Dict[str, Any]:
     """Builds a complete Sneaky Pete Error Hunt activity."""
     rng = random.Random(seed)

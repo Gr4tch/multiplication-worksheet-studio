@@ -23,7 +23,8 @@ def create_worksheet_pdf(
     strategy_info: Optional[Dict[str, Any]] = None,
     include_answer_key: bool = True,
     differentiation_level: str = "core",
-    font_choice: str = "Helvetica"
+    font_choice: str = "Helvetica",
+    **kwargs
 ) -> bytes:
     """
     Generates a print-ready PDF byte stream matching preview styling 1:1.

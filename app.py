@@ -7,8 +7,22 @@ Optimized for classroom printing and Streamlit Community Cloud hosting.
 
 import json
 import random
+import importlib
 from pathlib import Path
 import streamlit as st
+
+import generators.math_engine as math_engine_mod
+import generators.riddle_generator as riddle_mod
+import generators.detective_generator as detective_mod
+import generators.maze_generator as maze_mod
+import export.pdf_engine as pdf_mod
+
+# Ensure hot-reloading in Streamlit Community Cloud without cached module stales
+importlib.reload(math_engine_mod)
+importlib.reload(riddle_mod)
+importlib.reload(detective_mod)
+importlib.reload(maze_mod)
+importlib.reload(pdf_mod)
 
 from generators.math_engine import get_strategy_tag
 from generators.riddle_generator import build_riddle_puzzle, get_jokes_by_category

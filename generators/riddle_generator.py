@@ -35,7 +35,8 @@ def build_riddle_puzzle(
     orientation: str = "horizontal",
     differentiation_level: str = "core", # 'scaffold', 'core', 'extension'
     problem_count_override: Optional[int] = None,
-    seed: Optional[int] = None
+    seed: Optional[int] = None,
+    **kwargs
 ) -> Dict[str, Any]:
     """
     Builds a complete Riddle / Secret Code puzzle.

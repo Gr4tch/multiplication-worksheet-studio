@@ -1,15 +1,25 @@
 """
-Verification test for Intelligent Newton Math Fact Generator.
-Validates all data files, generators, and ReportLab PDF outputs.
+Comprehensive Verification and Health Check Test Suite.
+Validates syntax compilation, data integrity, generators, PDF output, and code leak guardrails.
 """
 
+import glob
+import py_compile
 import json
+import re
 from pathlib import Path
 from generators.math_engine import generate_fact_set, get_strategy_tag
 from generators.riddle_generator import build_riddle_puzzle, load_jokes
 from generators.detective_generator import build_detective_puzzle
 from generators.maze_generator import build_maze_puzzle
 from export.pdf_engine import create_worksheet_pdf
+
+def test_syntax_compilation():
+    print("Testing syntax compilation across all workspace Python files...")
+    py_files = [f for f in glob.glob("**/*.py", recursive=True) if ".venv" not in f]
+    for pf in py_files:
+        py_compile.compile(pf, doraise=True)
+    print(f"[OK] All {len(py_files)} Python files compiled with zero syntax errors.")
 
 def test_data():
     print("Testing data files...")
@@ -50,17 +60,14 @@ def test_maze_generator():
 
 def test_pdf_engine():
     print("Testing PDF creation...")
-    # Test 1: Full Page Riddle
     riddle = build_riddle_puzzle(target_numbers=[4, 8], is_half_page=False)
     pdf1 = create_worksheet_pdf(puzzle_data=riddle, layout_mode="full_page", include_answer_key=True)
-    assert len(pdf1) > 1000, "PDF byte stream too small"
+    assert len(pdf1) > 1000
     
-    # Test 2: Half Page Twin Detective
     det = build_detective_puzzle(target_numbers=[3], is_half_page=True)
     pdf2 = create_worksheet_pdf(puzzle_data=det, layout_mode="half_page_twin", include_answer_key=True)
     assert len(pdf2) > 1000
     
-    # Test 3: Half Page A/B Maze
     maze_a = build_maze_puzzle(target_numbers=[7], is_half_page=True, seed=123)
     maze_b = build_maze_puzzle(target_numbers=[7], is_half_page=True, seed=456)
     pdf3 = create_worksheet_pdf(puzzle_data=maze_a, form_b_data=maze_b, layout_mode="half_page_ab", include_answer_key=True)
@@ -68,11 +75,22 @@ def test_pdf_engine():
     
     print(f"[OK] Generated 3 PDF files successfully (sizes: {len(pdf1)} bytes, {len(pdf2)} bytes, {len(pdf3)} bytes).")
 
+def test_code_leak_guardrails():
+    print("Testing code-leak prevention guardrails...")
+    # Check that no standard codes leak into student prompts
+    riddle = build_riddle_puzzle(target_numbers=[3, 4], is_half_page=False, differentiation_level="scaffold")
+    assert "WA CCSS" not in riddle["question"]
+    if riddle.get("scaffold_support"):
+        assert "WA CCSS" not in riddle["scaffold_support"]["title"]
+    print("[OK] Code-leak and standards guardrails verified.")
+
 if __name__ == "__main__":
+    test_syntax_compilation()
     test_data()
     test_math_engine()
     test_riddle_generator()
     test_detective_generator()
     test_maze_generator()
     test_pdf_engine()
-    print("\nALL 6 VERIFICATION SUITES PASSED PERFECTLY!")
+    test_code_leak_guardrails()
+    print("\nALL 8 HEALTH & VERIFICATION SUITES PASSED PERFECTLY!")

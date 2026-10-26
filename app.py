@@ -599,7 +599,7 @@ with col_exp1:
                 st.markdown(f"#### {label}")
             ptype = p_data.get("type")
             if ptype == "riddle":
-                st.markdown(f"**Riddle Question:** *"{p_data.get('question')}"*")
+                st.markdown(f"**Riddle Question:** *\"{p_data.get('question')}\"*")
                 st.success(f"**🎉 SOLVED PUNCHLINE:** `{p_data.get('punchline')}`")
                 
                 # Uncluttered 2-column answer key with coaching look-fors
@@ -641,7 +641,7 @@ with col_exp1:
                 ])
                 if p_data.get("case_notes_prompt"):
                     st.markdown("**📝 Case Log Exemplar:**")
-                    st.info("*"Problem #4: Pete wrote 6 × 4 = 10 because he added 6 + 4. To multiply, he needed 4 groups of 6, which equals 24 (double 6 is 12, double 12 is 24)."*")
+                    st.info('*"Problem #4: Pete wrote 6 × 4 = 10 because he added 6 + 4. To multiply, he needed 4 groups of 6, which equals 24 (double 6 is 12, double 12 is 24)."*')
             else:
                 st.markdown(f"**🚀 Pathfinder Coordinates (Row, Col):** `{p_data.get('path_coords')}`")
                 if p_data.get("checkpoint_prompt"):

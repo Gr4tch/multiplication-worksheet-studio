@@ -92,9 +92,9 @@ st.sidebar.subheader("2. Differentiation & Standards Level")
 diff_level_choice = st.sidebar.radio(
     "Choose Level:",
     [
-        "🟡 Grade 3 Core (Standard Fact Practice)",
-        "🟢 Grade 2 Scaffold (Extra Visuals & Repeated Addition)",
-        "🟣 Grade 4 Extension (Star Comparison Challenge)"
+        "🟡 Core Practice (Grade 3 On-Level)",
+        "🟢 Visual Support (Equal Groups & Repeated Addition)",
+        "🟣 Star Challenge (Comparison Word Problems)"
     ]
 )
 
@@ -442,7 +442,7 @@ def render_html_worksheet(p_data, form_label=""):
             elif p_data.get("show_thinking"):
                 html += """
                 <div style="margin-top: 16px; padding: 12px 16px; border: 1.5px solid #000; border-radius: 6px; background: #fff;">
-                    <div style="font-weight: bold; font-size: 13px;">🎨 SHOW YOUR THINKING (WA CCSS 3.OA.A.1):</div>
+                    <div style="font-weight: bold; font-size: 13px;">🎨 SHOW YOUR THINKING:</div>
                     <div style="font-size: 12px; color: #444; margin-bottom: 8px;">Pick any fact from above. In the space below, sketch a <strong>rectangular array</strong> (rows × columns) to prove your answer!</div>
                     <div style="height: 70px; border: 1px dashed #999; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #888; font-size: 12px;">
                         [ Draw your array of dots or squares here ]
@@ -599,34 +599,58 @@ with col_exp1:
                 st.markdown(f"#### {label}")
             ptype = p_data.get("type")
             if ptype == "riddle":
-                st.markdown(f"**Question:** *{p_data.get('question')}*")
-                st.markdown(f"**Solved Punchline:** `{p_data.get('punchline')}`")
-                st.table([
-                    {
-                        "Letter": p.get("letter"),
-                        "Equation": f"{p['factor1']} × {p['factor2']} = {p['product']}",
-                        "Code Value": p.get("answer"),
-                        "Strategy": p.get("strategy")
-                    }
-                    for p in p_data.get("problems", [])
-                ])
+                st.markdown(f"**Riddle Question:** *"{p_data.get('question')}"*")
+                st.success(f"**🎉 SOLVED PUNCHLINE:** `{p_data.get('punchline')}`")
+                
+                # Uncluttered 2-column answer key with coaching look-fors
+                c_k1, c_k2 = st.columns(2)
+                probs = p_data.get("problems", [])
+                half = (len(probs) + 1) // 2
+                
+                with c_k1:
+                    for p in probs[:half]:
+                        hint = f" — *{p['repeated_addition_hint']}*" if p.get("repeated_addition_hint") else ""
+                        st.markdown(f"**[{p.get('letter')}]** `{p['factor1']} × {p['factor2']} =` **{p['product']}** {hint}")
+                        st.caption(f"💡 {p.get('strategy', '')}")
+                with c_k2:
+                    for p in probs[half:]:
+                        hint = f" — *{p['repeated_addition_hint']}*" if p.get("repeated_addition_hint") else ""
+                        st.markdown(f"**[{p.get('letter')}]** `{p['factor1']} × {p['factor2']} =` **{p['product']}** {hint}")
+                        st.caption(f"💡 {p.get('strategy', '')}")
+                
+                if p_data.get("show_thinking"):
+                    st.markdown("---")
+                    sample_fact = probs[0] if probs else {"factor1": 3, "factor2": 4, "product": 12}
+                    s_r = min(sample_fact["factor1"], 4) or 3
+                    s_c = min(sample_fact["factor2"], 6) or 4
+                    dot_grid = "\n".join(["  ".join(["●"] * s_c) for _ in range(s_r)])
+                    st.markdown(f"**🎨 Exemplar Array Model for `{sample_fact['factor1']} × {sample_fact['factor2']} = {sample_fact['product']}`:**")
+                    st.code(f"{dot_grid}\n\nStructure: {s_r} Rows × {s_c} Columns = {sample_fact['product']} total\nTeacher Look-For: Verify straight rows and columns (equal groups), not a scattered cluster.")
+
             elif ptype == "detective":
-                st.markdown("**Sneaky Pete Error Analysis:**")
+                st.markdown("**🕵️ Sneaky Pete Mistake Key & Misconception Analysis:**")
                 st.table([
                     {
                         "#": p["id"],
                         "Pete's Equation": f"{p['factor1']} × {p['factor2']} = {p['displayed_answer']}",
-                        "Verdict": "MISTAKE" if p["is_error"] else "CORRECT",
+                        "Verdict": "✗ MISTAKE" if p["is_error"] else "✓ Correct",
                         "True Product": p["correct_answer"],
                         "Misconception / Reasoning": p["error_reason"]
                     }
                     for p in p_data.get("problems", [])
                 ])
+                if p_data.get("case_notes_prompt"):
+                    st.markdown("**📝 Case Log Exemplar:**")
+                    st.info("*"Problem #4: Pete wrote 6 × 4 = 10 because he added 6 + 4. To multiply, he needed 4 groups of 6, which equals 24 (double 6 is 12, double 12 is 24)."*")
             else:
-                st.markdown(f"**Pathfinder Coordinates (Row, Col):** `{p_data.get('path_coords')}`")
+                st.markdown(f"**🚀 Pathfinder Coordinates (Row, Col):** `{p_data.get('path_coords')}`")
+                if p_data.get("checkpoint_prompt"):
+                    st.markdown(f"**🏁 Multiples Checkpoint Exemplar:** Multiples of {p_data.get('targets_str')} (e.g. 4, 8, 12, 16, 20).")
 
             if p_data.get("extension_challenge"):
-                st.info(f"⭐ **Grade 4 Star Challenge Key:** {p_data['extension_challenge']['solution']}")
+                st.success(f"⭐ **Star Challenge Key:** {p_data['extension_challenge']['solution']} (WA CCSS 4.OA.A.1)")
+            elif p_data.get("scaffold_support"):
+                st.info(f"🌱 **Visual Support Exemplar:** {p_data['scaffold_support']['repeated_addition_example']} (WA CCSS 2.OA.C.4)")
 
         if layout_code == "half_page_ab":
             tab_a, tab_b = st.tabs(["Form A (Top Half)", "Form B (Bottom Half)"])

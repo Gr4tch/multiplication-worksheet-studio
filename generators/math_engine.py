@@ -129,7 +129,7 @@ def generate_extension_challenge(target_numbers: List[int], rng: random.Random) 
     
     total = base_count * multiplier
     
-    prompt = f"⭐ <b>GRADE 4 STAR CHALLENGE:</b> {n1} has {base_count} {item}. {n2} has <b>{multiplier} times as many</b> {item} as {n1}. How many {item} does {n2} have in all?"
+    prompt = f"⭐ <b>STAR CHALLENGE:</b> {n1} has {base_count} {item}. {n2} has <b>{multiplier} times as many</b> {item} as {n1}. How many {item} does {n2} have in all?"
     equation_blank = "Equation: _____ × _____ = _____ " + item
     solution_str = f"{base_count} × {multiplier} = {total} {item}"
     
@@ -154,7 +154,7 @@ def generate_scaffold_support(target_numbers: List[int]) -> Dict[str, Any]:
     return {
         "type": "visual_scaffold",
         "standard": "WA CCSS 2.OA.C.4",
-        "title": f"🌱 Grade 2 Visual Scaffold: Multiples of {t}",
+        "title": f"🌱 Visual Strategy Helper: Multiples of {t}",
         "dots_visual": f"Equal Groups of {t}: {dots_sample}",
         "repeated_addition_example": f"Example: 3 groups of {t} = {t} + {t} + {t} = {3 * t}"
     }
